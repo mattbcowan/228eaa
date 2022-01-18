@@ -9,10 +9,83 @@ import {
   FormControl,
   TextField,
 } from "@material-ui/core";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { login } from "./store/utils/thunkCreators";
+import LoginFormImage from "./components/LoginFormImage";
+
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    navigationContainer: {
+      padding: "2em",
+      justifyContent: "flex-end",
+      alignItems: "center",
+      marginBottom: "3em",
+
+      [theme.breakpoints.down("sm")]: {
+        justifyContent: "center",
+        marginBottom: 0,
+      },
+    },
+    navigationButton: {
+      fontSize: "1em",
+      fontWeight: "bold",
+      marginLeft: "2em",
+      padding: "0.75em 2em",
+      backgroundColor: "#ffffff",
+      color: "#3A8DFF",
+
+      [theme.breakpoints.down("sm")]: {
+        margin: "0",
+      },
+
+      "&:hover": {
+        backgroundColor: "#d9d9d9",
+      },
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "0.9em",
+        padding: "0.5em 1em",
+      },
+    },
+    navigationText: {
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "0.9em",
+        padding: "0.5em 1em",
+      },
+    },
+    formHeader: {
+      fontWeight: "bold",
+      fontSize: "1.75em",
+      marginBottom: "2em",
+    },
+    submitForm: {
+      textAlign: "center",
+    },
+    submitButton: {
+      fontSize: "1em",
+      fontWeight: "bold",
+      padding: "0.75em 3em",
+      marginTop: "4em",
+    },
+    passwordContainer: {
+      display: "flex",
+      flexDirection: "row",
+    },
+    passwordInput: {
+      flex: 1,
+    },
+    forgotButton: {
+      borderBottom: "1px solid #949494",
+      borderRadius: 0,
+      fontSize: "0.875em",
+      alignSelf: "flex-end",
+      paddingBottom: "0.2em",
+    },
+  })
+);
 
 const Login = (props) => {
   const history = useHistory();
+  const classes = useStyles();
   const { user, login } = props;
 
   const handleLogin = async (event) => {
@@ -29,39 +102,68 @@ const Login = (props) => {
 
   return (
     <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to register?</Typography>
-          <Button onClick={() => history.push("/register")}>Register</Button>
+      <Grid item xs={12} md={5}>
+        <LoginFormImage />
+      </Grid>
+      <Grid item xs={12} md={7}>
+        <Grid container item className={classes.navigationContainer}>
+          <Typography color="secondary" className={classes.navigationText}>
+            Don't have an account?
+          </Typography>
+          <Button
+            onClick={() => history.push("/register")}
+            variant="contained"
+            size="large"
+            color="primary"
+            className={classes.navigationButton}
+          >
+            Create account
+          </Button>
         </Grid>
-        <form onSubmit={handleLogin}>
-          <Grid>
-            <Grid>
-              <FormControl margin="normal" required>
-                <TextField
-                  aria-label="username"
-                  label="Username"
-                  name="username"
-                  type="text"
-                />
-              </FormControl>
+        <Box mx="auto" width="75%">
+          <Typography className={classes.formHeader}>Welcome back!</Typography>
+          <form onSubmit={handleLogin} className={classes.submitForm}>
+            <Grid container spacing={8} direction="column">
+              <Grid item>
+                <FormControl
+                  fullWidth
+                  required
+                  className={classes.usernameContainer}
+                >
+                  <TextField
+                    aria-label="username"
+                    label="E-mail address"
+                    name="username"
+                    type="text"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item>
+                <FormControl required className={classes.passwordContainer}>
+                  <TextField
+                    label="Password"
+                    aria-label="password"
+                    type="password"
+                    name="password"
+                    className={classes.passwordInput}
+                  />
+                  <Button color="primary" className={classes.forgotButton}>
+                    Forgot?
+                  </Button>
+                </FormControl>
+              </Grid>
             </Grid>
-            <FormControl margin="normal" required>
-              <TextField
-                label="password"
-                aria-label="password"
-                type="password"
-                name="password"
-              />
-            </FormControl>
-            <Grid>
-              <Button type="submit" variant="contained" size="large">
-                Login
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </Box>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.submitButton}
+            >
+              Login
+            </Button>
+          </form>
+        </Box>
+      </Grid>
     </Grid>
   );
 };
