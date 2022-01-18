@@ -73,6 +73,9 @@ export const fetchConversations = () => async (dispatch) => {
   try {
     const { data } = await axios.get("/api/conversations");
     dispatch(gotConversations(data));
+    data.map((e) =>
+      e.messages.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+    );
   } catch (error) {
     console.error(error);
   }
