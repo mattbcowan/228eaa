@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
 const Input = (props) => {
   const classes = useStyles();
   const [text, setText] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState([]);
   const [progress, setProgress] = useState(0);
   const fileSelect = useRef(null);
   const { postMessage, otherUser, conversationId, user } = props;
@@ -43,9 +43,11 @@ const Input = (props) => {
       recipientId: otherUser.id,
       conversationId,
       sender: conversationId ? null : user,
+      attachments: image ? image : null,
     };
     await postMessage(reqBody);
     setText("");
+    setImage(null);
   };
 
   const handlePhoto = async () => {
@@ -74,7 +76,7 @@ const Input = (props) => {
     xhr.onreadystatechange = (e) => {
       if (xhr.readyState === 4 && xhr.status === 200) {
         const response = JSON.parse(xhr.responseText);
-        setImage(response.secure_url);
+        setImage([...image, response.secure_url]);
       }
     };
 
