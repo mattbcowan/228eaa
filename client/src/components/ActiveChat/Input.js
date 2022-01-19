@@ -28,6 +28,7 @@ const Input = (props) => {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
   const [progress, setProgress] = useState(0);
+  const fileSelect = useRef(null);
   const { postMessage, otherUser, conversationId, user } = props;
 
   const handleChange = (event) => {
