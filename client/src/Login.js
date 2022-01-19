@@ -1,87 +1,30 @@
 import React from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import {
-  Grid,
-  Box,
-  Typography,
-  Button,
-  FormControl,
-  TextField,
-} from "@material-ui/core";
-import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { Grid, Box, Button, FormControl, TextField } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { login } from "./store/utils/thunkCreators";
-import LoginFormImage from "./components/LoginFormImage";
+import LoginFormImage from "./components/Authentication/LoginFormImage";
+import FormHeader from "./components/Authentication/FormHeader";
+import Navigation from "./components/Authentication/Navigation";
+import SubmitForm from "./components/Authentication/SubmitForm";
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    navigationContainer: {
-      padding: "2em",
-      justifyContent: "flex-end",
-      alignItems: "center",
-      marginBottom: "3em",
-
-      [theme.breakpoints.down("sm")]: {
-        justifyContent: "center",
-        marginBottom: 0,
-      },
-    },
-    navigationButton: {
-      fontSize: "1em",
-      fontWeight: "bold",
-      marginLeft: "2em",
-      padding: "0.75em 2em",
-      backgroundColor: "#ffffff",
-      color: "#3A8DFF",
-
-      [theme.breakpoints.down("sm")]: {
-        margin: "0",
-      },
-
-      "&:hover": {
-        backgroundColor: "#d9d9d9",
-      },
-      [theme.breakpoints.down("sm")]: {
-        fontSize: "0.9em",
-        padding: "0.5em 1em",
-      },
-    },
-    navigationText: {
-      [theme.breakpoints.down("sm")]: {
-        fontSize: "0.9em",
-        padding: "0.5em 1em",
-      },
-    },
-    formHeader: {
-      fontWeight: "bold",
-      fontSize: "1.75em",
-      marginBottom: "2em",
-    },
-    submitForm: {
-      textAlign: "center",
-    },
-    submitButton: {
-      fontSize: "1em",
-      fontWeight: "bold",
-      padding: "0.75em 3em",
-      marginTop: "4em",
-    },
-    passwordContainer: {
-      display: "flex",
-      flexDirection: "row",
-    },
-    passwordInput: {
-      flex: 1,
-    },
-    forgotButton: {
-      borderBottom: "1px solid #949494",
-      borderRadius: 0,
-      fontSize: "0.875em",
-      alignSelf: "flex-end",
-      paddingBottom: "0.2em",
-    },
-  })
-);
+const useStyles = makeStyles(() => ({
+  passwordContainer: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  passwordInput: {
+    flex: 1,
+  },
+  forgotButton: {
+    borderBottom: "1px solid #949494",
+    borderRadius: 0,
+    fontSize: "0.875em",
+    alignSelf: "flex-end",
+    paddingBottom: "0.2em",
+  },
+}));
 
 const Login = (props) => {
   const history = useHistory();
@@ -106,23 +49,14 @@ const Login = (props) => {
         <LoginFormImage />
       </Grid>
       <Grid item xs={12} md={7}>
-        <Grid container item className={classes.navigationContainer}>
-          <Typography color="secondary" className={classes.navigationText}>
-            Don't have an account?
-          </Typography>
-          <Button
-            onClick={() => history.push("/register")}
-            variant="contained"
-            size="large"
-            color="primary"
-            className={classes.navigationButton}
-          >
-            Create account
-          </Button>
-        </Grid>
+        <Navigation
+          onClick={() => history.push("/register")}
+          navText="Don't have an account?"
+          btnText="Create account"
+        />
         <Box mx="auto" width="75%">
-          <Typography className={classes.formHeader}>Welcome back!</Typography>
-          <form onSubmit={handleLogin} className={classes.submitForm}>
+          <FormHeader>Welcome back!</FormHeader>
+          <SubmitForm onSubmit={handleLogin} btnText="Login">
             <Grid container spacing={8} direction="column">
               <Grid item>
                 <FormControl
@@ -153,15 +87,7 @@ const Login = (props) => {
                 </FormControl>
               </Grid>
             </Grid>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.submitButton}
-            >
-              Login
-            </Button>
-          </form>
+          </SubmitForm>
         </Box>
       </Grid>
     </Grid>

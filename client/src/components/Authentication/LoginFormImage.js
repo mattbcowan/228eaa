@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) =>
       height: "100vh",
       width: "100%",
       background:
-        "url(/assets/bg-img.png), linear-gradient(to bottom, rgba(58, 140, 255, 1) 0%, rgba(134, 185, 255, 1) 100%)",
+        "url(/assets/bg-img.png), linear-gradient(180deg, #3A8DFF 0%, #86B9FF 100%)",
       backgroundRepeat: "no-repeat",
       backgroundSize: "cover",
       backgroundBlendMode: "soft-light",
@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) =>
       flexDirection: "column",
       justifyContent: "flex-start",
       alignItems: "center",
+      opacity: "0.85",
 
       [theme.breakpoints.down("sm")]: {
         height: "30vh",
