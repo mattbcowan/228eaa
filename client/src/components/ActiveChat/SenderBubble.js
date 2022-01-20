@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Typography } from "@material-ui/core";
+import UserImage from "./UserImage";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -53,7 +54,7 @@ const useStyles = makeStyles(() => ({
 
 const SenderBubble = (props) => {
   const classes = useStyles();
-  const { time, text, attachments } = props;
+  const { time, text, attachments, user } = props;
 
   if (attachments !== null && attachments.length > 1) {
     return (
@@ -63,8 +64,8 @@ const SenderBubble = (props) => {
         </Box>
         <Box className={classes.attachmentsContainer}>
           {attachments !== null &&
-            attachments.map((image) => (
-              <Box className={classes.imgContainer}>
+            attachments.map((image, index) => (
+              <Box className={classes.imgContainer} key={index}>
                 <img
                   className={classes.uploadedImage}
                   src={image}
@@ -74,6 +75,7 @@ const SenderBubble = (props) => {
             ))}
         </Box>
         <Typography className={classes.date}>{time}</Typography>
+        <UserImage user={user} />
       </Box>
     );
   } else if (attachments.length === 1) {
@@ -92,6 +94,7 @@ const SenderBubble = (props) => {
         <Box className={classes.singleImageBubble}>
           <Typography className={classes.text}>{text}</Typography>
         </Box>
+        <UserImage user={user} />
       </Box>
     );
   } else {
@@ -101,6 +104,7 @@ const SenderBubble = (props) => {
         <Box className={classes.bubble}>
           <Typography className={classes.text}>{text}</Typography>
         </Box>
+        <UserImage user={user} />
       </Box>
     );
   }

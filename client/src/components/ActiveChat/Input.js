@@ -8,7 +8,7 @@ import {
 import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
-import { postMessage } from "../../store/utils/thunkCreators";
+import { postMessage, uploadFiles } from "../../store/utils/thunkCreators";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -21,13 +21,15 @@ const useStyles = makeStyles(() => ({
     borderRadius: 8,
     marginBottom: 20,
   },
+  hidden: {
+    display: "none",
+  },
 }));
 
 const Input = (props) => {
   const classes = useStyles();
   const [text, setText] = useState("");
   const [image, setImage] = useState([]);
-  const [progress, setProgress] = useState(0);
   const fileSelect = useRef(null);
   const { postMessage, otherUser, conversationId, user } = props;
 
@@ -50,40 +52,21 @@ const Input = (props) => {
     setImage(null);
   };
 
-  const handlePhoto = async () => {
+  const handlePhoto = () => {
     if (fileSelect) {
       fileSelect.current.click();
     }
   };
 
   const handleFiles = (files) => {
+    let images = [];
     for (let i = 0; i < files.length; i++) {
-      uploadFile(files[i]);
+      uploadFiles(files[i])
+        .then((res) => {
+          images.push(res.secure_url);
+        })
+        .then(() => setImage([...images]));
     }
-  };
-
-  const uploadFile = (file) => {
-    const url = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/upload`;
-    const xhr = new XMLHttpRequest();
-    const fd = new FormData();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-
-    xhr.upload.addEventListener("progress", (e) => {
-      setProgress(Math.round((e.loaded * 100.0) / e.total));
-    });
-
-    xhr.onreadystatechange = (e) => {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        const response = JSON.parse(xhr.responseText);
-        setImage([...image, response.secure_url]);
-      }
-    };
-
-    fd.append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET);
-    fd.append("tags", "browser_upload");
-    fd.append("file", file);
-    xhr.send(fd);
   };
 
   return (
@@ -108,10 +91,13 @@ const Input = (props) => {
       <input
         type="file"
         name="file"
+        multiple="multiple"
         accept="image/*"
         ref={fileSelect}
-        style={{ display: "none" }}
-        onChange={(e) => handleFiles(e.target.files)}
+        className={classes.hidden}
+        onChange={(e) => {
+          handleFiles(e.target.files);
+        }}
       />
     </form>
   );
