@@ -1,9 +1,8 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Typography } from "@material-ui/core";
-import Image from "./Image";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
     flexDirection: "column",
@@ -24,14 +23,33 @@ const useStyles = makeStyles({
   },
   bubble: {
     background: "#F4F6FA",
-    borderRadius: (props) => props.borderRadius,
+    borderRadius: "10px 10px 0 10px",
     margin: "5px 0",
-    width: (props) => props.width,
+  },
+  singleImageBubble: {
+    background: "#F4F6FA",
+    borderRadius: "0 0 0 10px",
+    width: "200px",
+  },
+  singleImage: {
+    marginBottom: "-6px",
+    borderRadius: "10px 10px 0 0",
+    overflow: "hidden",
   },
   attachmentsContainer: {
     display: "flex",
   },
-});
+  imgContainer: {
+    borderRadius: "20px 20px 0 20px",
+    overflow: "hidden",
+    marginLeft: "1em",
+  },
+  uploadedImage: {
+    height: "200px",
+    width: "200px",
+    objectFit: "cover",
+  },
+}));
 
 const SenderBubble = (props) => {
   const classes = useStyles();
@@ -40,13 +58,19 @@ const SenderBubble = (props) => {
   if (attachments !== null && attachments.length > 1) {
     return (
       <Box className={classes.root}>
-        <Box className={classes.bubble} borderRadius="10px 10px 0 10px">
+        <Box className={classes.bubble}>
           <Typography className={classes.text}>{text}</Typography>
         </Box>
         <Box className={classes.attachmentsContainer}>
           {attachments !== null &&
             attachments.map((image) => (
-              <Image src={image} borderRadius="20px 20px 0 20px" />
+              <Box className={classes.imgContainer}>
+                <img
+                  className={classes.uploadedImage}
+                  src={image}
+                  alt="user uploaded content"
+                />
+              </Box>
             ))}
         </Box>
         <Typography className={classes.date}>{time}</Typography>
@@ -57,13 +81,15 @@ const SenderBubble = (props) => {
       <Box className={classes.root}>
         <Typography className={classes.date}>{time}</Typography>
         <Box className={classes.attachmentsContainer}>
-          <Image
-            src={attachments[0]}
-            borderRadius="10px 10px 0 0"
-            marginBottom="-6px"
-          />
+          <Box className={classes.singleImage}>
+            <img
+              className={classes.uploadedImage}
+              src={attachments[0]}
+              alt="user uploaded content"
+            />
+          </Box>
         </Box>
-        <Box className={classes.bubble} borderRadius="0 0 0 10px" width="200px">
+        <Box className={classes.singleImageBubble}>
           <Typography className={classes.text}>{text}</Typography>
         </Box>
       </Box>
