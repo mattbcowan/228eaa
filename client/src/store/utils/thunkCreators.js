@@ -110,6 +110,24 @@ export const postMessage = (body) => async (dispatch) => {
   }
 };
 
+export const uploadFiles = async (files) => {
+  const imageUrl = `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/upload`;
+  const formData = new FormData();
+  const config = {
+    transformRequest: (data, headers) => {
+      delete headers["x-access-token"];
+      return data;
+    },
+    headers: { "X-Requested-With": "XMLHttpRequest" },
+  };
+  formData.append("file", files);
+  formData.append("tags", "browser_upload");
+  formData.append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET);
+
+  const { data } = await axios.post(imageUrl, formData, config);
+  return data;
+};
+
 export const searchUsers = (searchTerm) => async (dispatch) => {
   try {
     const { data } = await axios.get(`/api/users/${searchTerm}`);
