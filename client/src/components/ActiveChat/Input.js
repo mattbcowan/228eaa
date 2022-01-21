@@ -59,14 +59,12 @@ const Input = (props) => {
   };
 
   const handleFiles = (files) => {
-    let images = [];
-    for (let i = 0; i < files.length; i++) {
-      uploadFiles(files[i])
-        .then((res) => {
-          images.push(res.secure_url);
-        })
-        .then(() => setImage([...images]));
-    }
+    Promise.all([...files].map(uploadFiles))
+      .then((results) => {
+        let imageLinks = results.map((image) => image.secure_url);
+        setImage(imageLinks);
+      })
+      .catch((err) => console.error(err));
   };
 
   return (

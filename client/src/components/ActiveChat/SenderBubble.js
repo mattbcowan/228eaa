@@ -1,26 +1,17 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Box, Typography } from "@material-ui/core";
-import UserImage from "./UserImage";
+import { Grid, Typography } from "@material-ui/core";
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-end",
-  },
+import UserImage from "./UserImage";
+import Attachments from "./Attachments";
+import Bubble from "./Bubble";
+
+const useStyles = makeStyles({
   date: {
     fontSize: 11,
     color: "#BECCE2",
     fontWeight: "bold",
     margin: "5px 0",
-  },
-  text: {
-    fontSize: 14,
-    color: "#91A3C0",
-    letterSpacing: -0.2,
-    padding: 8,
-    fontWeight: "bold",
   },
   bubble: {
     background: "#F4F6FA",
@@ -28,84 +19,45 @@ const useStyles = makeStyles(() => ({
     margin: "5px 0",
   },
   singleImageBubble: {
+    marginTop: "-6px",
     background: "#F4F6FA",
     borderRadius: "0 0 0 10px",
     width: "200px",
   },
-  singleImage: {
-    marginBottom: "-6px",
-    borderRadius: "10px 10px 0 0",
-    overflow: "hidden",
-  },
-  attachmentsContainer: {
-    display: "flex",
-  },
-  imgContainer: {
-    borderRadius: "20px 20px 0 20px",
-    overflow: "hidden",
-    marginLeft: "1em",
-  },
-  uploadedImage: {
-    height: "200px",
-    width: "200px",
-    objectFit: "cover",
-  },
-}));
+});
 
 const SenderBubble = (props) => {
-  const classes = useStyles();
+  const { date, bubble, singleImageBubble } = useStyles();
   const { time, text, attachments, user } = props;
 
-  if (attachments !== null && attachments.length > 1) {
+  if (attachments && attachments.length > 1) {
     return (
-      <Box className={classes.root}>
-        <Box className={classes.bubble}>
-          <Typography className={classes.text}>{text}</Typography>
-        </Box>
-        <Box className={classes.attachmentsContainer}>
-          {attachments !== null &&
-            attachments.map((image, index) => (
-              <Box className={classes.imgContainer} key={index}>
-                <img
-                  className={classes.uploadedImage}
-                  src={image}
-                  alt="user uploaded content"
-                />
-              </Box>
-            ))}
-        </Box>
-        <Typography className={classes.date}>{time}</Typography>
+      <Grid container direction="column" alignItems="flex-end">
+        <Bubble bubbleClass={bubble}>{text}</Bubble>
+        <Attachments
+          attachments={attachments}
+          borderRadius="20px 20px 0 20px"
+        />
+        <Typography className={date}>{time}</Typography>
         <UserImage user={user} />
-      </Box>
+      </Grid>
     );
-  } else if (attachments.length === 1) {
+  } else if (attachments && attachments.length === 1) {
     return (
-      <Box className={classes.root}>
-        <Typography className={classes.date}>{time}</Typography>
-        <Box className={classes.attachmentsContainer}>
-          <Box className={classes.singleImage}>
-            <img
-              className={classes.uploadedImage}
-              src={attachments[0]}
-              alt="user uploaded content"
-            />
-          </Box>
-        </Box>
-        <Box className={classes.singleImageBubble}>
-          <Typography className={classes.text}>{text}</Typography>
-        </Box>
+      <Grid container direction="column" alignItems="flex-end">
+        <Typography className={date}>{time}</Typography>
+        <Attachments attachments={attachments} borderRadius="10px 10px 0 0" />
+        <Bubble bubbleClass={singleImageBubble}>{text}</Bubble>
         <UserImage user={user} />
-      </Box>
+      </Grid>
     );
   } else {
     return (
-      <Box className={classes.root}>
-        <Typography className={classes.date}>{time}</Typography>
-        <Box className={classes.bubble}>
-          <Typography className={classes.text}>{text}</Typography>
-        </Box>
+      <Grid container direction="column" alignItems="flex-end">
+        <Typography className={date}>{time}</Typography>
+        <Bubble bubbleClass={bubble}>{text}</Bubble>
         <UserImage user={user} />
-      </Box>
+      </Grid>
     );
   }
 };

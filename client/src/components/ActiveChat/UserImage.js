@@ -18,7 +18,7 @@ const UserImage = ({ user }) => {
       alt={user.username}
       src={user.photoUrl}
       className={classes.avatar}
-    ></Avatar>
+    />
   );
 };
 
